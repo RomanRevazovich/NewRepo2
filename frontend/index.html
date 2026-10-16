@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel Booking Demo</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Бронирование отелей (Docker Compose Lab)</h1>
+    <p>Frontend → Backend → (DB / Web-Service)</p>
+
+    <button onclick="fetchData('db')">Кнопка 1: Получить данные из БД</button>
+    <button onclick="fetchData('service')">Кнопка 2: Запрос к Web-сервису (бронирование)</button>
+
+    <div id="result">Нажми кнопку, чтобы увидеть результат</div>
+
+    <script>
+    async function fetchData(type) {
+      const url = `http://backend:8000/${type === 'db' ? 'items' : 'booking'}`;
+      // В браузере мы не можем обращаться к "backend" напрямую, поэтому используем относительный путь,
+      // а Nginx на фронтенде проксирует запросы на бэкенд.
+      // Для простоты в этом примере мы делаем запрос на /api, который будет проксироваться.
+
+      try {
+        const res = await fetch(`/api/${type === 'db' ? 'items' : 'booking'}`);
+        const data = await res.json();
+        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('result').textContent = 'Ошибка: ' + e.message;
+      }
+    }
+    </script>
+</body>
+</html>

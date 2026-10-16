@@ -1,0 +1,8 @@
+﻿  backend:
+    build: ./backend
+    ports:
+      - "8002:8000"  # Пробрасываем порт 8002 на хост, чтобы браузер мог достучаться
+    environment:
+      - MONGO_URI=mongodb://db:27017
+      - WEB_SERVICE_URL=http://web-service:8001
+    # ... остальная часть
